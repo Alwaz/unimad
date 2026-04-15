@@ -1,6 +1,6 @@
+import type { HealthCheckResponse } from '@repo/shared';
 import { Router, type Router as RouterType } from 'express';
 import mongoose from 'mongoose';
-import type { HealthCheckResponse } from '@repo/shared';
 
 const router: RouterType = Router();
 

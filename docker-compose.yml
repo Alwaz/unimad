@@ -28,10 +28,10 @@ services:
       retries: 5
       start_period: 5s
 
-  api:
+  backend:
     build:
       context: .
-      dockerfile: apps/api/Dockerfile
+      dockerfile: apps/backend/Dockerfile
     ports:
       - "4000:4000"
     environment:
@@ -54,16 +54,16 @@ services:
       retries: 3
       start_period: 10s
 
-  web:
+  frontend:
     build:
       context: .
-      dockerfile: apps/web/Dockerfile
+      dockerfile: apps/frontend/Dockerfile
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://api:4000/api/v1
+      - NEXT_PUBLIC_API_URL=http://backend:4000/api/v1
     depends_on:
-      api:
+      backend:
         condition: service_healthy
     restart: unless-stopped
 
