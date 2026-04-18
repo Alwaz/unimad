@@ -1,3 +1,4 @@
+import { FilterGroup } from '@/components/features/directory/filter-group';
 import { SearchBar } from '@/components/shared/search-bar';
 
 async function Directory(
@@ -19,14 +20,13 @@ async function Directory(
 */
 
   return (
-    <div className="py-5">
+    <div className="py-5 space-y-5">
       <SearchBar />
-      {/* <FilterGroup/> */}
 
+      <FilterGroup />
       {/* <Suspense key={query + currentPage} fallback={<ProgramsSkeleton />}>
         <Programs query={query} currentPage={currentPage} />
       </Suspense> */}
-
       <div className="mt-5 flex w-full justify-center">
         {/* <Pagination totalPages={totalPages} /> */}
       </div>
