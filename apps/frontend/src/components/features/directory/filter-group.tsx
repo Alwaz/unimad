@@ -172,17 +172,18 @@ export function FilterGroup() {
           </div>
         </div>
 
-        <div className="flex items-center justify-center ">
-          <Button
-            variant="ghost"
-            className="h-10 px-3  text-sm font-semibold"
-            onClick={handleClearFilters}
-            disabled={!hasActiveFilter}
-            type="button"
-          >
-            Clear filters
-          </Button>
-        </div>
+        {hasActiveFilter && (
+          <div className="flex items-center justify-center ">
+            <Button
+              variant="ghost"
+              className="h-10 px-3  text-sm font-semibold"
+              onClick={handleClearFilters}
+              type="button"
+            >
+              Clear filters
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

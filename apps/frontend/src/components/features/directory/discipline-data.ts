@@ -46,6 +46,21 @@ export const DISCIPLINES: DisciplineOption[] = [
       { value: 'graphic-design', label: 'Graphic Design' },
     ],
   },
+  // Add more disciplines and programs to test scrollability
+  {
+    value: 'health',
+    label: 'Health',
+    programs: [
+      { value: 'nursing', label: 'Nursing' },
+      { value: 'public-health', label: 'Public Health' },
+      { value: 'pharmacy', label: 'Pharmacy' },
+    ],
+  },
+  {
+    value: 'law',
+    label: 'Law',
+    programs: [{ value: 'criminal-law', label: 'Criminal Law' }],
+  },
 ];
 
 export function findDisciplineByProgram(programSlug: string) {
