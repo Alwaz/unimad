@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/select';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
-import { findDisciplineByProgram, findProgramByValue } from './discipline-data';
 import { DisciplineDialog } from './discipline-dialog';
 
 const degreeOptions = [
@@ -23,6 +22,9 @@ const degreeOptions = [
 const studyModeOptions = [
   { value: 'full-time', label: 'Full-time' },
   { value: 'part-time', label: 'Part-time' },
+  { value: 'online', label: 'Online' },
+  { value: 'hybrid', label: 'Hybrid' },
+  { value: 'on-campus', label: 'On Campus' },
 ];
 
 type FilterParamValue = string | null;
@@ -33,18 +35,8 @@ export function FilterGroup() {
   const router = useRouter();
 
   const currentProgram = searchParams.get('programs') ?? '';
-  const currentDegree = searchParams.get('degreeLevel') ?? '';
-  const currentStudyMode = searchParams.get('studyModes') ?? '';
-
-  const selectedProgramLabel = useMemo(
-    () => (currentProgram ? (findProgramByValue(currentProgram)?.label ?? '') : ''),
-    [currentProgram],
-  );
-
-  const selectedDisciplineLabel = useMemo(
-    () => (currentProgram ? (findDisciplineByProgram(currentProgram)?.label ?? '') : ''),
-    [currentProgram],
-  );
+  const currentDegree = searchParams.get('degree') ?? '';
+  const currentStudyMode = searchParams.get('mode') ?? '';
 
   const validDegreeValue = useMemo(
     () =>
@@ -91,8 +83,8 @@ export function FilterGroup() {
   function handleClearFilters() {
     const params = new URLSearchParams(searchParams);
     params.delete('programs');
-    params.delete('degreeLevel');
-    params.delete('studyModes');
+    params.delete('degree');
+    params.delete('mode');
     replaceParams(params);
   }
 
@@ -117,7 +109,7 @@ export function FilterGroup() {
         <div className="max-w-xs  flex-1">
           <div className="space-y-2">
             <Label
-              htmlFor="degreeLevel"
+              htmlFor="degree"
               className="text-[0.65rem] uppercase  tracking-wider 
             text-accent-foreground"
             >
@@ -125,10 +117,10 @@ export function FilterGroup() {
             </Label>
             <Select
               value={validDegreeValue ?? undefined}
-              onValueChange={(value: string) => updateParam('degreeLevel', value || null)}
+              onValueChange={(value: string) => updateParam('degree', value || null)}
             >
               <SelectTrigger
-                id="degreeLevel"
+                id="degree"
                 className="bg-white
                 w-full text-sm"
               >
@@ -148,7 +140,7 @@ export function FilterGroup() {
         <div className="max-w-xs  flex-1">
           <div className="space-y-2">
             <Label
-              htmlFor="studyModes"
+              htmlFor="mode"
               className="text-[0.65rem] uppercase  tracking-wider
                text-accent-foreground"
             >
@@ -156,9 +148,9 @@ export function FilterGroup() {
             </Label>
             <Select
               value={validStudyModeValue ?? undefined}
-              onValueChange={(value: string) => updateParam('studyModes', value || null)}
+              onValueChange={(value: string) => updateParam('mode', value || null)}
             >
-              <SelectTrigger id="studyModes" className="bg-white w-full text-sm">
+              <SelectTrigger id="mode" className="bg-white w-full text-sm">
                 <SelectValue placeholder="All modes" />
               </SelectTrigger>
               <SelectContent>

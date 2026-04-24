@@ -1,5 +1,7 @@
 import mongoose, { type Document, Schema } from 'mongoose';
 
+// TODO: rename this file to program.model.ts and update the model accordingly,
+// this is just a placeholder model for users, replace it with actual fields for programs
 export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;
   email: string;
@@ -8,6 +10,7 @@ export interface IUser extends Document {
   updatedAt: Date;
 }
 
+// programSchema
 const userSchema = new Schema<IUser>(
   {
     email: {
@@ -39,4 +42,5 @@ const userSchema = new Schema<IUser>(
   },
 );
 
+// ProgramModel
 export const UserModel = mongoose.model<IUser>('User', userSchema);

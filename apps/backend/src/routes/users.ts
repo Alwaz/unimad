@@ -1,17 +1,18 @@
+import type { ApiResponse, PaginatedResponse, User } from '@repo/shared';
+import { clampPageSize, DEFAULT_PAGE_SIZE, HTTP_STATUS, MAX_PAGE_SIZE } from '@repo/shared';
 import { Router, type Router as RouterType } from 'express';
 import mongoose from 'mongoose';
 import { z } from 'zod';
-import type { ApiResponse, User, PaginatedResponse } from '@repo/shared';
-import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@repo/shared';
-import { validate } from '../middleware/validate.js';
-import { clampPageSize } from '@repo/shared';
 import { AppError } from '../middleware/error-handler.js';
-import { HTTP_STATUS } from '@repo/shared';
+import { validate } from '../middleware/validate.js';
 import { UserModel } from '../models/user.model.js';
 import { cache } from '../services/cache.js';
 
+// rename file to programs.ts
+
 const router: RouterType = Router();
 
+// rename to toProgram
 function toUser(doc: { toJSON: () => Record<string, unknown> }): User {
   const json = doc.toJSON();
   const createdAt = json['createdAt'];
@@ -25,6 +26,7 @@ function toUser(doc: { toJSON: () => Record<string, unknown> }): User {
   };
 }
 
+// rename to createProgramSchema
 const createUserSchema = z.object({
   email: z.string().email(),
   name: z.string().min(1).max(100),
@@ -35,7 +37,7 @@ const updateUserSchema = z.object({
   name: z.string().min(1).max(100).optional(),
 });
 
-// List users
+// List programs with pagination and optional search query
 router.get('/', async (req, res, next) => {
   try {
     const page = Number(req.query['page']) || 1;
@@ -61,11 +63,12 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// Get user by ID (cached in Redis if available)
+// Get program by ID (cached in Redis if available)
 router.get('/:id', async (req, res, next) => {
   try {
     const id = String(req.params['id']);
 
+    // invalid program ID
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new AppError(HTTP_STATUS.BAD_REQUEST, 'Invalid user ID');
     }
@@ -73,15 +76,20 @@ router.get('/:id', async (req, res, next) => {
     // Try cache first
     const cached = await cache.get<User>(`user:${id}`);
     if (cached) {
-      res.json({ success: true, data: cached, _cached: true } as ApiResponse<User> & { _cached: boolean });
+      res.json({ success: true, data: cached, _cached: true } as ApiResponse<User> & {
+        _cached: boolean;
+      });
       return;
     }
 
+    // ProgramModel.findById(id)
     const doc = await UserModel.findById(id);
     if (!doc) {
+      // Program not found
       throw new AppError(HTTP_STATUS.NOT_FOUND, 'User not found');
     }
 
+    // program = toProgram(doc) - convert Mongoose document to plain JS object with correct types
     const user = toUser(doc);
 
     // Cache for future reads
@@ -134,7 +142,11 @@ router.patch('/:id', validate({ body: updateUserSchema }), async (req, res, next
       }
     }
 
-    const doc = await UserModel.findByIdAndUpdate(id, { $set: updates }, { new: true, runValidators: true });
+    const doc = await UserModel.findByIdAndUpdate(
+      id,
+      { $set: updates },
+      { new: true, runValidators: true },
+    );
     if (!doc) {
       throw new AppError(HTTP_STATUS.NOT_FOUND, 'User not found');
     }
@@ -174,4 +186,5 @@ router.delete('/:id', async (req, res, next) => {
   }
 });
 
+// usersRouter -> programsRouter
 export { router as usersRouter };

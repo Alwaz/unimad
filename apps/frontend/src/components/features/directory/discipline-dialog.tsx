@@ -73,7 +73,7 @@ export function DisciplineDialog({ selectedProgram, onApply }: Readonly<Discipli
               </Button>
             )}
             <DialogTitle asChild className="text-left">
-              <h3>{step === 1 ? 'Select Discipline' : discipline?.label}</h3>
+              <h3 className="text-xl">{step === 1 ? 'Select Discipline' : discipline?.label}</h3>
             </DialogTitle>
           </div>
           <DialogDescription asChild>

@@ -1,13 +1,13 @@
-import express from 'express';
+import { API_VERSION } from '@repo/shared';
 import cors from 'cors';
+import express from 'express';
 import helmet from 'helmet';
 import { env } from './config/env.js';
-import { requestLogger } from './middleware/request-logger.js';
 import { errorHandler } from './middleware/error-handler.js';
+import { requestLogger } from './middleware/request-logger.js';
 import { healthRouter } from './routes/health.js';
-import { usersRouter } from './routes/users.js';
 import { testRouter } from './routes/test.js';
-import { API_VERSION } from '@repo/shared';
+import { usersRouter } from './routes/users.js';
 
 export function createApp(): express.Express {
   const app = express();
@@ -29,6 +29,7 @@ export function createApp(): express.Express {
   app.use(requestLogger);
 
   // Routes
+  // /programs, programsRouter
   const apiPrefix = `/api/${API_VERSION}`;
   app.use(`${apiPrefix}/health`, healthRouter);
   app.use(`${apiPrefix}/users`, usersRouter);

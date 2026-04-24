@@ -13,23 +13,18 @@
 import Directory from '@/components/features/directory/directory';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TAB_VALUES } from '@/lib/constants';
+import type { SearchParams } from '@repo/shared';
 
-export default async function Home() {
-  /*
-  Programs should accept filters as query params, 
-  so we can pass the search query from the search bar to the directory page 
-  and fetch the filtered programs. 
-  We can also implement pagination and pass the page number as a query param.
-filters should be url based so that we can share the filtered results with others 
-and also so that we can bookmark the filtered results.
-
-*/
-
-  // const programs = await getPrograms();
+export default async function Home(
+  props: Readonly<{
+    searchParams?: Promise<SearchParams>;
+  }>,
+) {
+  const searchParams = await props.searchParams;
 
   return (
     <main className=" space-y-5">
-      <h1 className="text-5xl font-display font-semibold tracking-tight text-foreground">
+      <h1 className="sm:text-5xl   text-3xl  font-display font-semibold tracking-tight text-foreground">
         Discover your <span className="italic  text-muted-foreground">academic future.</span>
       </h1>
 
@@ -44,7 +39,8 @@ and also so that we can bookmark the filtered results.
         </TabsList>
 
         <TabsContent value={TAB_VALUES.DIRECTORY}>
-          <Directory />
+          {/* pass searchParams object to directory */}
+          <Directory searchParams={searchParams} />
         </TabsContent>
         <TabsContent value={TAB_VALUES.COMPARE}>
           <p>Compare</p>
