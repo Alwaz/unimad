@@ -39,7 +39,6 @@ export default async function Home(
         </TabsList>
 
         <TabsContent value={TAB_VALUES.DIRECTORY}>
-          {/* pass searchParams object to directory */}
           <Directory searchParams={searchParams} />
         </TabsContent>
         <TabsContent value={TAB_VALUES.COMPARE}>

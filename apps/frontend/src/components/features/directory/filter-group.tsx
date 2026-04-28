@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { MODE, type ModeType } from '@repo/shared';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { DisciplineDialog } from './discipline-dialog';
@@ -19,12 +20,10 @@ const degreeOptions = [
   { value: 'phd', label: 'PhD' },
 ];
 
-const studyModeOptions = [
-  { value: 'full-time', label: 'Full-time' },
-  { value: 'part-time', label: 'Part-time' },
-  { value: 'online', label: 'Online' },
-  { value: 'hybrid', label: 'Hybrid' },
-  { value: 'on-campus', label: 'On Campus' },
+const studyModeOptions: { value: ModeType; label: string }[] = [
+  { value: MODE.ON_CAMPUS, label: 'On Campus' },
+  { value: MODE.ONLINE, label: 'Online' },
+  { value: MODE.HYBRID, label: 'Hybrid' },
 ];
 
 type FilterParamValue = string | null;
