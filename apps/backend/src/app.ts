@@ -7,7 +7,7 @@ import { errorHandler } from './middleware/error-handler.js';
 import { requestLogger } from './middleware/request-logger.js';
 import { healthRouter } from './routes/health.js';
 import { testRouter } from './routes/test.js';
-import { usersRouter } from './routes/users.js';
+import { programsRouter } from './routes/programs.js';
 
 export function createApp(): express.Express {
   const app = express();
@@ -32,7 +32,7 @@ export function createApp(): express.Express {
   // /programs, programsRouter
   const apiPrefix = `/api/${API_VERSION}`;
   app.use(`${apiPrefix}/health`, healthRouter);
-  app.use(`${apiPrefix}/users`, usersRouter);
+  app.use(`${apiPrefix}/programs`, programsRouter);
   app.use(`${apiPrefix}/test`, testRouter);
 
   // Error handling — must be last
