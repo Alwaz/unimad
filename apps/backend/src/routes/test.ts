@@ -1,6 +1,7 @@
 import { Router, type Router as RouterType } from 'express';
 import mongoose from 'mongoose';
 import type { ApiResponse } from '@repo/shared';
+import { ProgramModel } from '../models/program.model.js';
 
 const router: RouterType = Router();
 
@@ -63,6 +64,39 @@ router.get('/info', (_req, res) => {
     },
   };
   res.json(response);
+});
+
+router.get('/programs', async (req, res, next) => {
+  try {
+    const page = Number(req.query['page']) || 1;
+    const pageSize = Number(req.query['pageSize']) || 10;
+    const skip = (page - 1) * pageSize;
+
+    const [total, docs] = await Promise.all([
+      ProgramModel.countDocuments(),
+      ProgramModel.find()
+        .sort({ 'important_dates.application_deadline': 1 })
+        .skip(skip)
+        .limit(pageSize),
+    ]);
+
+    const pageCount = Math.ceil(total / pageSize);
+    res.json({
+      success: true,
+      data: {
+        items: docs.map((d) => d.toJSON()),
+        totalCount: total,
+        currentPage: page,
+        pageCount,
+        isFirstPage: page === 1,
+        isLastPage: page >= pageCount,
+        previousPage: page > 1 ? page - 1 : null,
+        nextPage: page < pageCount ? page + 1 : null,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
 export { router as testRouter };
