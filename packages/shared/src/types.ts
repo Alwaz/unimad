@@ -21,10 +21,13 @@ export interface ApiErrorResponse {
 
 export interface PaginatedResponse<T> {
   items: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
+  totalCount: number;
+  currentPage: number;
+  pageCount: number;
+  isFirstPage: boolean;
+  isLastPage: boolean;
+  previousPage: number | null;
+  nextPage: number | null;
 }
 
 export interface PaginationParams {
@@ -83,6 +86,7 @@ export type TestDate =
     };
 
 export interface Program {
+  id: string;
   name: string;
   program_slug: string;
 
