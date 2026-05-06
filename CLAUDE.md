@@ -1,6 +1,27 @@
-# CLAUDE.md
+## Application Building Context
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Read the following files in order before implementing
+or making any architectural decision:
+
+1. `context/project-overview.md` — product definition,
+   goals, features, and scope
+2. `context/architecture.md` — system structure,
+   boundaries, storage model, and invariants
+3. `context/ui-context.md` — theme, colors, typography,
+   and component conventions
+4. `context/code-standards.md` — implementation rules
+   and conventions
+5. `context/ai-workflow-rules.md` — development workflow,
+   scoping rules, and delivery approach
+6. `context/progress-tracker.md` — current phase,
+   completed work, open questions, and next steps
+
+Update `context/progress-tracker.md` after each
+meaningful implementation change.
+
+If implementation changes the architecture, scope, or
+standards documented in the context files, update the
+relevant file before continuing.
 
 ## Commands
 
@@ -46,20 +67,22 @@ Next.js 15 App Router. The primary page is a **university program directory** fo
 **URL-driven state**: All filter and search state lives in URL search params (`query`, `programs`, `degree`, `mode`, `page`). Server components read `searchParams`; client components use `useSearchParams` + `router.replace()` to update them.
 
 **Data flow** (current state — API not yet wired):
+
 - `PROGRAMS` array in `src/lib/constants.ts` is the data source (hardcoded static data).
 - `Directory` (server component) filters this array based on `searchParams` and renders `ProgramCard` grid.
 - `FilterGroup` (client component) manages Discipline / Degree type / Study mode selects, each updating URL params on change.
 - `SearchBar` applies debounced `query` param to URL.
 
 **Filter param → data field mapping**:
-| URL param  | `Program` field              | Values |
+| URL param | `Program` field | Values |
 |------------|------------------------------|--------|
-| `query`    | name, university.*           | free text |
-| `programs` | `program_slug`               | e.g. `software-engineering` |
-| `degree`   | `program_meta.degree`        | `bachelor` / `master` / `phd` |
-| `mode`     | `program_meta.mode`          | `ON_CAMPUS` / `ONLINE` / `HYBRID` |
+| `query` | name, university.\* | free text |
+| `programs` | `program_slug` | e.g. `software-engineering` |
+| `degree` | `program_meta.degree` | `bachelor` / `master` / `phd` |
+| `mode` | `program_meta.mode` | `ON_CAMPUS` / `ONLINE` / `HYBRID` |
 
 **Component organization**:
+
 - `src/components/features/directory/` — domain components (Directory, FilterGroup, DisciplineDialog, ProgramCard)
 - `src/components/shared/` — cross-feature components (Header, SearchBar)
 - `src/components/ui/` — shadcn/Radix primitives (do not modify directly)
@@ -82,12 +105,14 @@ Express 5 with native async error propagation (no `try/catch` wrapper needed in 
 **Redis is optional**: `src/services/cache.ts` gracefully degrades when Redis is unavailable.
 
 **Backend env vars** (in `apps/backend/.env`):
+
 ```
 NODE_ENV, PORT, CORS_ORIGIN, LOG_LEVEL
 MONGODB_URI, REDIS_URL, CACHE_TTL
 ```
 
 **Frontend env vars** (in `apps/frontend/.env`):
+
 ```
 NEXT_PUBLIC_API_URL=http://localhost:4000/api/v1
 ```
